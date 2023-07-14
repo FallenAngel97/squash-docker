@@ -8,7 +8,7 @@ async function run(): Promise<void> {
 		core.info(execSync('docker load --input /tmp/myimage.tar').toString());
 		core.info('Determining the path of docker-squash');
 		core.info(`which docker-squash`);
-		tags.split('/n').forEach(tag => {
+		tags.split('\n').forEach(tag => {
 			core.info(`docker-squash ${tag}`);
 			core.info(execSync(`docker-squash ${tag}`).toString());
 			core.info(execSync(`docker push ${tag}`).toString());
