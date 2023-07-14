@@ -2,14 +2,12 @@ name: 'docker-squash-action'
 description: 'Execute docker squash python script in Github action'
 author: 'FallenAngel97'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
   tags:
     required: false
     description: 'Docker tags'
     default: ''
 runs:
   using: 'node16'
+  pre: |
+    pip install docker-squash
   main: 'dist/index.js'

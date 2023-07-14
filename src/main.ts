@@ -1,16 +1,14 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import { execSync } from 'child_process';
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
 		const tags: string = core.getInput('tags');
 		core.info(tags);
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+		tags.split('/n').forEach(tag => {
+			console.log(execSync(`docker-squash ${tag}`).toString());
+			console.log(execSync(`docker push ${tag}`));
+		});
 
     core.setOutput('time', new Date().toTimeString())
   } catch (error) {
