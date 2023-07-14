@@ -45,11 +45,11 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const tags = core.getInput('tags');
-            core.info(tags);
-            console.log((0, child_process_1.execSync)('pip install docker-squash').toString());
+            core.info((0, child_process_1.execSync)('pip install docker-squash').toString());
+            core.info((0, child_process_1.execSync)('docker load --input /tmp/myimage.tar').toString());
             tags.split('/n').forEach(tag => {
-                console.log((0, child_process_1.execSync)(`docker-squash ${tag}`).toString());
-                console.log((0, child_process_1.execSync)(`docker push ${tag}`));
+                core.info((0, child_process_1.execSync)(`docker-squash ${tag}`).toString());
+                core.info((0, child_process_1.execSync)(`docker push ${tag}`).toString());
             });
             core.setOutput('time', new Date().toTimeString());
         }

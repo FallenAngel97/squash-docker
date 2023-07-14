@@ -4,11 +4,11 @@ import { execSync } from 'child_process';
 async function run(): Promise<void> {
   try {
 		const tags: string = core.getInput('tags');
-		core.info(tags);
-		console.log(execSync('pip install docker-squash').toString());
+		core.info(execSync('pip install docker-squash').toString());
+		core.info(execSync('docker load --input /tmp/myimage.tar').toString());
 		tags.split('/n').forEach(tag => {
-			console.log(execSync(`docker-squash ${tag}`).toString());
-			console.log(execSync(`docker push ${tag}`));
+			core.info(execSync(`docker-squash ${tag}`).toString());
+			core.info(execSync(`docker push ${tag}`).toString());
 		});
 
     core.setOutput('time', new Date().toTimeString())
