@@ -6,8 +6,9 @@ async function run(): Promise<void> {
 		const tags: string = core.getInput('tags');
 		core.info(execSync('pip install docker-squash').toString());
 		core.info(execSync('docker load --input /tmp/myimage.tar').toString());
+		core.info('Determining the path of docker-squash');
+		core.info(`which docker-squash`);
 		tags.split('/n').forEach(tag => {
-			core.info(`which docker-squash`);
 			core.info(`docker-squash ${tag}`);
 			core.info(execSync(`docker-squash ${tag}`).toString());
 			core.info(execSync(`docker push ${tag}`).toString());

@@ -47,7 +47,10 @@ function run() {
             const tags = core.getInput('tags');
             core.info((0, child_process_1.execSync)('pip install docker-squash').toString());
             core.info((0, child_process_1.execSync)('docker load --input /tmp/myimage.tar').toString());
+            core.info('Determining the path of docker-squash');
+            core.info(`which docker-squash`);
             tags.split('/n').forEach(tag => {
+                core.info(`docker-squash ${tag}`);
                 core.info((0, child_process_1.execSync)(`docker-squash ${tag}`).toString());
                 core.info((0, child_process_1.execSync)(`docker push ${tag}`).toString());
             });
