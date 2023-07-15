@@ -3,7 +3,8 @@ import { spawn } from 'child_process';
 
 const shellAsync = (cmd: string) => {
 	return new Promise((resolve: any) => {
-		const script = spawn(cmd);
+		const [command, ...args] = cmd.split(' ');
+		const script = spawn(command, args);
 
 		script.stdout.on('data', (data) => {
 			core.info(`${data}`);
