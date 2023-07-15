@@ -41,20 +41,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(81);
+const shellAsync = (cmd) => {
+    return new Promise((resolve) => {
+        const script = (0, child_process_1.spawn)(cmd);
+        script.stdout.on('data', (data) => {
+            core.info(`${data}`);
+        });
+        script.stderr.on('data', (data) => {
+            core.info(`${data}`);
+        });
+        script.on('close', (code) => {
+            core.info(`child process exited with code ${code}`);
+            resolve();
+        });
+    });
+};
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const tags = core.getInput('tags');
-            core.info((0, child_process_1.execSync)('pip install docker-squash').toString());
-            core.info((0, child_process_1.execSync)('docker load --input /tmp/myimage.tar').toString());
+            yield shellAsync('pip install docker-squash');
+            yield shellAsync('docker load --input /tmp/myimage.tar');
             core.info('Determining the path of docker-squash');
             core.info(`which docker-squash`);
-            tags.split('/n').forEach(tag => {
-                core.info(`docker-squash ${tag}`);
-                core.info((0, child_process_1.execSync)(`docker-squash ${tag}`).toString());
-                core.info((0, child_process_1.execSync)(`docker push ${tag}`).toString());
-            });
-            core.setOutput('time', new Date().toTimeString());
+            yield Promise.all(tags.split('\n').map((tag) => __awaiter(this, void 0, void 0, function* () {
+                yield shellAsync(`docker-squash -t ${tag}-squashed ${tag}`);
+                yield shellAsync(`docker push ${tag}-squashed`);
+            })));
         }
         catch (error) {
             if (error instanceof Error)
