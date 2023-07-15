@@ -43,7 +43,8 @@ const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(81);
 const shellAsync = (cmd) => {
     return new Promise((resolve) => {
-        const script = (0, child_process_1.spawn)(cmd);
+        const [command, ...args] = cmd.split(' ');
+        const script = (0, child_process_1.spawn)(command, args);
         script.stdout.on('data', (data) => {
             core.info(`${data}`);
         });
